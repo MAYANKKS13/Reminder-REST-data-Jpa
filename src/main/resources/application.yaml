@@ -9,9 +9,23 @@ spring:
     password: password # Password of the database
     driver-class-name: com.mysql.cj.jdbc.Driver # Driver class name of the databases
   jpa:
-    show-sql: true # Show SQL queries in the console
+    # show-sql: true # Show SQL queries in the console
     hibernate:
       ddl-auto: update # Update the database schema automatically
-      dialect: org.hibernate.dialect.MySQL8Dialect # Dialect of the database
+#      dialect: org.hibernate.dialect.MySQL8Dialect # Dialect of the database
+    database-platform: org.hibernate.dialect.MySQL8Dialect # Dialect of the database
 #  jackson:
 #    date-format: "yyyy-MM-dd" # Date format for the JSON response
+logging:
+  level:
+    root: info # Logging level of the application
+    org.hibernate.type.descriptor.sql.BasicBinder: trace # Logging level of the SQL queries
+    org.hibernate.SQL: trace # Logging level of the SQL queries
+  pattern:
+    console: "%d{dd/MM/yyy HH:mm:ss} %-5level - %msg%n" # Pattern of the console logs
+    file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n" # Pattern of the file logs
+  file:
+    name: logs\application.log # Name of the log file
+  logback:
+    rollingpolicy:
+      max-file-size: 1MB # Maximum size of the log file

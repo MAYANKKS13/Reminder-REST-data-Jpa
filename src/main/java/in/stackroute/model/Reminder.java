@@ -46,4 +46,10 @@ public class Reminder {
 
     @Column(name = "r_remind_me", nullable = false)
     private boolean remindMe;
+
+    public Reminder(String text, LocalDate date, boolean remindMe) {
+        this.text = text;
+        this.date = date;
+        this.remindMe = remindMe;
+    }
 }
