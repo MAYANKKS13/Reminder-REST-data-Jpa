@@ -1,12 +1,12 @@
 package in.stackroute.controller;
 
-import in.stackroute.exceptions.ReminderNotFoundException;
+import in.stackroute.dto.ReminderDto;
 import in.stackroute.model.Reminder;
 import in.stackroute.service.ReminderService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,14 +19,41 @@ import java.util.List;
 public class ReminderController {
 
     private final ReminderService reminderService;
-    private  final Logger logger = LoggerFactory.getLogger(ReminderController.class);
+    private final Logger logger = LoggerFactory.getLogger(ReminderController.class);
+
+    /**
+     * This method converts a ReminderDto object to a Reminder object.
+     * @param dto   ReminderDto object
+     * @return      Reminder object
+     */
+    private Reminder toEntity(ReminderDto dto) {
+        return new Reminder(
+                dto.text(), dto.date(), dto.remindMe()
+        );
+    }
+    /**
+     * This method converts a Reminder object to a ReminderDto object.
+     * @param reminder  Reminder object
+     * @return          ReminderDto object
+     */
+    private ReminderDto toDto(Reminder reminder) {
+        return new ReminderDto(
+                reminder.getId(), reminder.getText(), reminder.getDate(), reminder.isRemindMe()
+        );
+    }
 
     // POST /api/v1/reminders
     @PostMapping
-    public ResponseEntity<Reminder> createReminder(@RequestBody Reminder reminder) {
+    public ResponseEntity<ReminderDto> createReminder(@Valid @RequestBody ReminderDto dto) {
         logger.info("Creating reminder");
-        var savedReminder = reminderService.save(reminder);
-        return ResponseEntity.status(HttpStatusCode.valueOf(201)).body(savedReminder);
+        var savedReminder = reminderService.save(toEntity(dto));
+        return ResponseEntity
+                .status(
+                        HttpStatusCode
+                        .valueOf(201)
+                ).body(
+                        toDto(savedReminder)
+                );
     }
 
     // GET /api/v1/reminders
@@ -72,12 +99,6 @@ public class ReminderController {
         return ResponseEntity.noContent().build();
     }
 
-    @ExceptionHandler(ReminderNotFoundException.class)
-    public ResponseEntity<String> handleReminderNotFoundException(ReminderNotFoundException ex) {
-        logger.error(ex.getMessage());
-        return ResponseEntity
-                .status(HttpStatus.NOT_FOUND)
-                .body(ex.getMessage());
-    }
+
 
 }
