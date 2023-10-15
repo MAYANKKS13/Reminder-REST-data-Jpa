@@ -2,7 +2,7 @@ server.port=8000
 spring.application.name=reminder-service
 spring.datasource.url=jdbc:mysql://localhost:3306/reminder_service?useSSL=false
 spring.datasource.username=root
-spring.datasource.password=root
+spring.datasource.password=mayanksql
 spring.datasource.driver-class-name=com.mysql.jdbc.Driver
 spring.jpa.hibernate.ddl-auto=update
 spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MySQL5Dialect
